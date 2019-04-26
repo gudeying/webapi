@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head>
+	<meta charset="utf-8" />
+	<!--[if IE]>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
+	<title >评论</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="description" content="" />
+
+	<meta name="author" content="" />
+	<!-- favicons -->
+	<link rel="shortcut icon" href="/images/favicon.ico" />
+	<!-- bootstrap core CSS -->
+	<link href="/css/bootstrap.min.css" rel="stylesheet" />
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+	<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+
+	<![endif]-->
+	<link href="/css/font-awesome.css" rel="stylesheet" type="text/css" />
+	<link rel="stylesheet" href="/css/pintuer.css">
+	<script src="http://www.pintuer.com/js/jquery.js"></script>
+	<script src="/js/pintuer.js"></script>
+	<script src="/js/respond.js"></script>
+	<script src="/js/layer.js"></script>
+	<style type="text/css">
+		* {
+			box-sizing: border-box;
+			-moz-box-sizing: border-box;
+			-webkit-box-sizing: border-box;
+		}
+
+		.filterinput {
+			background-color: rgba(249, 244, 244, 0);
+			border-radius: 15px;
+			width: 90%;
+			height: 30px;
+			border: thin solid #FFF;
+			text-indent: 0.5em;
+			font-weight: bold;
+			color: #FFF;
+		}
+
+		#demo-list a {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			-o-text-overflow: ellipsis;
+			white-space: nowrap;
+			width: 100%;
+		}
+
+		img {
+			max-width: 90%;
+			max-height: 100%;
+		}
+	</style>
+</head>
+
+<body>
+<br />
+<br />
+
+<!--评论-->
+<div class="container" id="commentTestModal">
+	<div class="panel">
+		<ul class="list-group" th:attr="parentid=${comment.id},articleId=${articleId}" id="commentList">
+			<li>
+				<div class="panel-body">
+					<p th:text="|${comment.user}:${comment.time}|">用户</p>
+					<p th:utext="${comment.content}">
+						用户评论
+					</p><a th:attr="parentid=${comment.id},towho=null" class="button button-little border-blue swing-hover radius-rounded"
+						   onclick="answerComment(this)">回复</a>
+					<ul class="list-group" id="childrenComments">
+
+					</ul>
+					<hr class="bg-mix" />
+				</div>
+				<div style="text-align: center" >
+					<a href="#" data="1" id="first" class="btn-link">首页</a>
+					<a href="#" data="" id="previous" class="btn  btn-link">
+						<span class="icon-chevron-left"></span>Previous
+					</a>
+					<a  id="currentPage" class="btn">
+						<span class="badge bg-blue-light swing-hover"></span>
+					</a>
+					<a href="#" data="" id="next" class="btn btn-link">
+						Next<span class="icon-chevron-right"></span>
+					</a>
+					<a data="" id="last" class="btn-link">尾页</a>
+					<span id="totlenum"></span>
+				</div>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<hr class="bg-sub" />
+
+<script type="text/template" id="template">
+	<li>
+		{{? it.towho}}
+		<p>
+            <span>{{=it.time}}</span>
+			<font color="#6495ed">--:{{=it.user}}</font>回复<font color="#6495ed">{{=it.towho}}</font>
+		</p>
+        <p>{{=it.content}}<a parentid="{{=it.parentid}}" towho="{{=it.user}}" class="button button-little border-blue swing-hover radius-rounded"
+                             onclick="answerComment(this)">回复</a></p>
+		{{??}}
+		<p><span>{{=it.time}}</span>
+			<font color="#6495ed">{{=it.user}}->:</font>
+		</p>
+        <p>{{=it.content}}<a parentid="{{=it.parentid}}" towho="{{=it.user}}->{{=it.content}}" class="button button-little border-blue swing-hover radius-rounded"
+                             onclick="answerComment(this)">回复</a></p>
+		{{?}}
+	</li>
+</script>
+
+<script src="/js/doT.min.js"></script>
+</body>
+<script>
+    var template = $("#template").text();
+    var DOT = doT.template(template);
+    var parentId = $("#commentList").attr("parentId");
+    var articleId = $("#commentList").attr("articleId");
+	init();
+	function init() {
+        var pageNumber = 1;
+        var data = {"parentId":parentId,"pageNum":pageNumber};
+        getChildrenComments(pageNumber);
+
+        $(".btn-link").click(function (e) {
+            e.preventDefault();
+            var num = $(this).attr("data");
+            $("#childrenComments").empty();
+            getChildrenComments(num);
+        });
+    }
+
+	function getChildrenComments(pageNumber) {
+	    $("#childrenComments").empty();
+        var data = {"parentId":parentId,"pageNum":pageNumber};
+        $.ajax({
+            url:"/comment/children",
+            type:"post",
+            data:data,
+            dataType:"json",
+            success:function (data) {
+                if (data){
+                    var pagenum = data.pageNum;
+                    var totalPage = data.lastPage;
+                    var arr = data.list;
+                    var prePage = data.prePage;
+                    var nextPage = data.nextPage;
+                    var dataList = data["list"];
+                    for (var index in dataList){
+                        var comment = dataList[index];
+                        if (!data.hasPreviousPage) {
+                            $("#previous").hide();
+                        }
+                        if (!data.hasNextPage){
+                            $("#next").hide();
+                        }
+                        if (data.hasPreviousPage) {
+                            $("#previous").show();
+                        }
+                        if (data.hasNextPage){
+                            $("#next").show();
+                        }
+                        $("#totlenum").text("共"+totalPage+"页");
+                        $("#last").attr("data",data.lastPage);
+                        $("#previous").attr("data",prePage);
+                        $("#next").attr("data",nextPage);
+                        $("#currentPage").text(pagenum);
+                        $("#childrenComments").append(DOT(comment));
+                    }
+                }else {
+                    layer.closeAll("loading");
+                    layer.msg(data["message"],{icon:0,time:500});
+                }
+            },
+            error:function () {
+                layer.closeAll("loading");
+                layer.msg("对不起，发生了错误！请稍后重试",{icon:2,time:500})
+            }
+        });
+    }
+
+    function answerComment(param){
+        var towho = $(param).attr('towho');
+        var content;
+        layer.prompt({title: '回复', formType: 2}, function(pass, index){
+            layer.close(index);
+            layer.msg(pass);
+            content = pass;
+            if(content){
+                var paramBody = {"parentId":parentId,"towho":towho,"articleId":articleId,"content":content};
+                sendAnswer(paramBody);
+            }
+        });
+    }
+    function sendAnswer(data){
+        $.ajax({
+            url:"/answerComment",
+            type:"post",
+            data:data,
+            dataType:"json",
+            success:function (data) {
+                layer.closeAll("loading");
+                if (data["result"]){
+                    layer.msg("评论成功！",{icon:1,time:500});
+                }else {
+                    layer.msg(data["message"],{icon:0,time:500});
+                }
+            },
+            error:function () {
+                layer.closeAll("loading");
+                layer.msg("对不起，发生了错误！如果你已登陆，请稍后重试",{icon:2,time:500})
+            }
+        });
+
+    }
+</script>
+</html>

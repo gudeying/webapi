@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Cache-Control" content="no-transform " />
+    <title>表单页</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link href="css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="css/dropkick.css" rel="stylesheet" type="text/css" />
+    <link href="css/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="css/default.css" rel="stylesheet" type="text/css" />
+    <link href="css/themes.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="js/jquery.1.11.3.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/jquery.dropkick-min.js"></script>
+    <script type="text/javascript" src="js/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="js/pop.js"></script>
+    <script type="text/javascript" src="js/myfunctions.js"></script>
+    <script type="text/javascript" src="js/frame.js"></script>
+</head>
+
+<body>
+
+
+    <div class="div-header">
+
+        <div class="container-fluid">
+            <div class="header-title">后台管理</div>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/">回网站首页</a></li>
+               
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle"><span class="glyphicon glyphicon-user"></span> 欢迎您：系统管理员</a>
+                    <div class="dropdown-menu dropdown-user">
+                        <div class="pop-dropdown-apps user-tk">
+                            <div class="pda_arr"></div>
+                            <dl class="pda-list user_pda">
+                                <img src="images/image.PNG">
+                                <div class="userright-list">
+                                    <h1>openid&nbsp;&nbsp;:&nbsp;&nbsp;23326</h1>
+                                    <h2>
+                                        <b>权限等级：</b>VIP
+                                        <br> <b>角&nbsp; &nbsp;色：</b>
+                                    </h2>
+                                </div>
+                                <div class="clear"></div>
+
+                                <div class="userexit">
+                                    <button id="btn_FanHui2" type="button" class="btn btn-info addbtm" style=" padding-top:4px;"><span
+                                            class="glyphicon glyphicon-pencil"></span> 编辑信息</button>
+                                    <button onclick="location.href='login.html'" type="button" class="btn btn-default">退出登录</button>
+                                </div>
+                                <div class="clear"></div>
+                            </dl>
+
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div><!-- container-fluid -->
+
+
+    </div><!-- div_header -->
+
+    <div class="div-leftside-bg">
+    </div>
+    <div class="div-leftside">
+
+        <div class="leftside-switch" onclick="LeftNav.toggle()">
+            <span class="caret"></span>
+        </div>
+
+
+        <div class="left-nav">
+            <div class="left-nav-group">
+                <div class="lng-toggle"><span class="caret"></span></div>
+                <h2>文章</h2>
+                <ul>
+                    <li><a href="form.html">表单</a></li>
+                    <li><a class="active" href="biaoGe.html">表格</a></li>
+                    <li><a href="bianJiKuan.html">编辑块</a></li>
+                    <li><a href="youCeTiShi.html">右侧提示</a></li>
+                    <li><a href="tanChuKuang.html">弹出框</a></li>
+                    <li><a href="xiaLaLieBiao.html">下拉列表</a></li>
+                    <li><a href="shu.html">树</a></li>
+                    <li><a href="easyui_grid.html">easyui表格</a></li>
+                    <li><a href="youCeJinDu.html">右侧进度</a></li>
+                    <li><a href="shu.html">树</a></li>
+                    <li><a href="easyui_grid.html">easyui表格</a></li>
+                </ul>
+            </div><!-- left-nav-group -->
+
+
+            <div class="left-nav-group">
+                <div class="lng-toggle"><span class="caret"></span></div>
+                <h2>项目管理</h2>
+                <ul>
+                    <li><a href="#">我的项目管理</a></li>
+                    <li><a href="#">我的学科管理</a></li>
+                    <li><a href="#">项目预算调整</a></li>
+                </ul>
+            </div><!-- left-nav-group -->
+
+            <div class="left-nav-group">
+                <div class="lng-toggle"><span class="caret"></span></div>
+                <h2>项目进度</h2>
+                <ul>
+                    <li><a href="#">项目进度查看</a></li>
+                    <li><a href="#">项目查看</a></li>
+                </ul>
+            </div><!-- left-nav-group -->
+        </div><!-- left-nav -->
+
+
+    </div><!-- div_leftside -->
+
+    <div class="div-rightside">
+
+        <div class="main-frame">
+
+            <ul class="nav nav-tabs">
+                <li class="active"><a onclick="NavTab(this)" href="#">全部</a></li>
+
+            </ul>
+
+            <div class="form-search" id="divFormSearch">
+
+                <div class="form-horizontal search-normal">
+                    <div class="form-group col-sm-6 col-md-4 col-lg-3">
+                        <label class="fg-text control-label">字段一</label>
+                        <div class="fg-input">
+                            <input type="text" class="form-control" placeholder="请填写这一个字段">
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-4 col-lg-3">
+                        <label class="fg-text control-label">字段一</label>
+                        <div class="fg-input">
+                            <select class="select-dropkick" style="width:100%">
+                                <option value="0">选项一</option>
+                                <option value="1">选项二</option>
+                                <option value="2">选项三</option>
+                                <option value="3">选项四</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-4 col-lg-3">
+                        <label class="fg-text control-label">&nbsp;</label>
+                        <div class="fg-input">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-info"><span class="glyphicon glyphicon-search"></span>
+                                    搜索</button>
+                                <button type="button" class="btn btn-default" onclick="FormSearch.toggle('divFormSearch')">高级</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- form-search -->
+
+
+            <div class="table-normal">
+                <table class="table table-bordered table-hover" cellspacing="0" cellpadding="0" border="0">
+                    <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>操作</th>
+                            <th>执行申请编号</th>
+                            <th>付款单编号</th>
+                            <th>借款事由</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>2</td>
+                            <td>K1050133001004</td>
+                            <td>11606200002</td>
+                            <td>事由</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>2</td>
+                            <td>K1050133001004</td>
+                            <td>11606200002</td>
+                            <td>事由</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>2</td>
+                            <td>K1050133001004</td>
+                            <td>11606200002</td>
+                            <td>事由</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>2</td>
+                            <td>K1050133001004</td>
+                            <td>11606200002</td>
+                            <td>事由</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>2</td>
+                            <td>K1050133001004</td>
+                            <td>11606200002</td>
+                            <td>事由</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <ul class="pagination">
+                <li>
+                    <a href="#">
+                        <span>&laquo;</span>
+                    </a>
+                </li>
+                <li><a href="#">1</a></li>
+                <li><a href="#">2</a></li>
+                <li><a href="#">3</a></li>
+                <li><a href="#">4</a></li>
+                <li><a href="#">5</a></li>
+                <li>
+                    <a href="#">
+                        <span>&raquo;</span>
+                    </a>
+                </li>
+                <li class="ml10 mr10">
+                    向第
+                    <input class="form-control page-num-input"></span>
+                    / 9 页
+                </li>
+                <li class=" mr10">
+                    <button type="button" class="btn btn-info  page-num-btn">跳转</button>
+                </li>
+                <li class=" mr10">
+                    共 99 条记录
+                </li>
+            </ul>
+
+            <div class="table-title">操作在表格行内</div>
+<br><br>
+
+            <div class="form-search" id="searchArt">
+
+                <div class="form-horizontal search-normal">
+                    <div class="form-group col-sm-6 col-md-4 col-lg-3">
+                        <label class="fg-text control-label">标题</label>
+                        <div class="fg-input">
+                            <input id="title" type="text" class="form-control" placeholder="标题">
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-4 col-lg-3">
+                        <label class="fg-text control-label">话题分类</label>
+                        <div class="fg-input">
+                            <select id="topic" class="select-dropkick" style="width:100%">
+                                <option value="0">选项一</option>
+                                <option value="1">选项二</option>
+                                <option value="2">选项三</option>
+                                <option value="3">选项四</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-4 col-lg-3">
+                        <label class="fg-text control-label">&nbsp;</label>
+                        <div class="fg-input">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-info"><span class="glyphicon glyphicon-search"></span>
+                                    搜索</button>
+                                <button type="button" class="btn btn-default" onclick="refresh()">高级</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- form-search -->
+
+            <div class="table-normal">
+                <table id="st" class="table table-bordered table-hover" cellspacing="0" cellpadding="0" border="0">
+                </table>
+                <script src="js/grid.js"></script>
+                <script type="application/javascript">
+                    function refresh() {
+                        $('#st').datagrid('reload');
+                    }
+                </script>
+            </div>
+
+            <br>
+            <p>另外</p>
+            <div class="table-normal">
+                <table class="table table-bordered table-hover" cellspacing="0" cellpadding="0" border="0">
+                    <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>操作</th>
+                            <th>执行申请编号</th>
+                            <th>借款事由</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>
+                                <div class="td-lnks">
+                                    <a title="添加" class="toggle-tooltip" href="#"><span class="glyphicon glyphicon-plus"></span></a>
+                                    <a title="编辑" class="toggle-tooltip" href="#"><span class="glyphicon glyphicon-pencil"></span></a>
+                                    <a title="删除" class="toggle-tooltip" href="#"><span class="glyphicon glyphicon-trash"></span></a>
+                                    <a title="查看" class="toggle-tooltip" href="#"><span class="glyphicon glyphicon-search"></span></a>
+                                    <a title="确认" class="toggle-tooltip" href="#"><span class="glyphicon glyphicon-ok"></span></a>
+                                    <a title="取消" class="toggle-tooltip" href="#"><span class="glyphicon glyphicon-remove"></span></a>
+                                    <a title="设置" class="toggle-tooltip" href="#"><span class="glyphicon glyphicon-cog"></span></a>
+                                    <a title="撤销" class="toggle-tooltip" href="#"><span class="glyphicon glyphicon-share-alt glyphicon-rotate"></span></a>
+                                    <a title="导出" class="toggle-tooltip" href="#"><span class="glyphicon glyphicon-save"></span></a>
+                                </div>
+                            </td>
+                            <td>11606200002</td>
+                            <td>事由</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>
+                                <div class="td-lnks">
+                                    <a title="上传" class="toggle-tooltip" href="#"><span class="glyphicon glyphicon-cloud-upload"></span></a>
+                                    <a title="下载" class="toggle-tooltip" href="#"><span class="glyphicon glyphicon-cloud-download"></span></a>
+                                    <a title="编辑" class="toggle-tooltip" href="#"><span class="glyphicon glyphicon-pencil"></span></a>
+                                    <a title="删除" class="toggle-tooltip" href="#"><span class="glyphicon glyphicon-trash"></span></a>
+                                    <a title="查看" class="toggle-tooltip" href="#"><span class="glyphicon glyphicon-search"></span></a>
+                                    <a title="确认" class="toggle-tooltip" href="#"><span class="glyphicon glyphicon-ok"></span></a>
+                                    <a title="取消" class="toggle-tooltip" href="#"><span class="glyphicon glyphicon-remove"></span></a>
+                                    <a title="设置" class="toggle-tooltip" href="#"><span class="glyphicon glyphicon-cog"></span></a>
+                                    <a title="撤销" class="toggle-tooltip" href="#"><span class="glyphicon glyphicon-share-alt glyphicon-rotate"></span></a>
+                                    <a title="下载" class="toggle-tooltip" href="#"><span class="glyphicon glyphicon-save"></span></a>
+                                </div>
+                            </td>
+                            <td>11606200002</td>
+                            <td>事由</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <br />
+            <br />
+            <script type="text/javascript">
+                // <!--
+                $(".select-dropkick").dropkick();
+                //-->
+            </script>
+
+        </div><!-- main-frame -->
+
+
+
+    </div><!-- div_rightside -->
+
+</body>
+
+</html>

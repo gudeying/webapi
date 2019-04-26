@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head>
+<meta charset="utf-8" />
+<!--[if IE]>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
+<title th:text="${article.title}">Article Detail</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="" />
+
+<meta name="author" content="" />
+<!-- favicons -->
+<link rel="shortcut icon" href="/images/favicon.ico" />
+<!-- bootstrap core CSS -->
+<link href="/css/bootstrap.min.css" rel="stylesheet" />
+<!-- custom styles for this template -->
+<link href="/css/templatemo_style.css" rel="stylesheet" />
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+
+    <![endif]-->
+<script src="/ueditor.parse.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/search-form.css">
+<script src="/js/jquery-1.10.1.min.js"></script>
+<link rel="stylesheet" href="/css/style.css">
+<link href="/css/jquery-accordion-menu.css" rel="stylesheet"
+	type="text/css" />
+<link href="/css/font-awesome.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="/css/pintuer.css">
+<link rel="stylesheet"
+	href="/third-party/SyntaxHighlighter/shCoreDefault.css" />
+<script src="/third-party/SyntaxHighlighter/shCore.js"></script>
+<!--     <script src="http://www.pintuer.com/js/jquery.js"></script> -->
+<script src="/js/pintuer.js"></script>
+<script src="/js/respond.js"></script>
+<script src="/js/layer.js"></script>
+<style type="text/css">
+* {
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+}
+
+.filterinput {
+	background-color: rgba(249, 244, 244, 0);
+	border-radius: 15px;
+	width: 90%;
+	height: 30px;
+	border: thin solid #FFF;
+	text-indent: 0.5em;
+	font-weight: bold;
+	color: #FFF;
+}
+
+#demo-list a {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	-o-text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 100%;
+}
+
+img {
+	max-width: 90%;
+	max-height: 100%;
+}
+</style>
+<!--   <script src="js/jquery-1.11.2.min.js" type="text/javascript"></script> -->
+<script src="/js/jquery-accordion-menu.js" type="text/javascript"></script>
+</head>
+
+<body>
+	<header>
+		<div class="container" id="menuctrl"
+			style="padding-left: 0; margin-left: 0">
+			<div class="toggle-menu">
+				<span class="toggle-button">
+					<div class="menu-bar menu-bar-top"></div>
+					<div class="menu-bar menu-bar-middle"></div>
+					<div class="menu-bar menu-bar-bottom"></div>
+				</span>
+				<div class="mymenu">
+					<div id="jquery-accordion-menu" class="jquery-accordion-menu red">
+						<div class="jquery-accordion-menu-header" id="form"></div>
+						<ul id="demo-list">
+							<li th:if="${not islogin}"><a id="ajaxLogin"><i
+									class="fa fa-user"></i>login</a></li>
+
+							<li th:if="${islogin}"><a
+								th:href="@{'/'+${user.openid}+'/home'}"><i
+									class="fa fa-user"></i><span th:text="${user.name}">用户名</span></a>
+							</li>
+							<li class="active"><a href="/"><i class="fa fa-home"></i>首页
+							</a></li>
+							<li><a href="#"><i class="fa fa-glass"></i>创作 </a>
+								<ul class="submenu">
+									<li><a href="/write">写文章</a></li>
+									<li><a id="uploadGallery">传相册</a></li>
+								</ul></li>
+							<li th:if="${islogin}"><a
+								th:href="@{'/'+${user.id}+'/favorite'}"><i
+									class="fa fa-file-image-o"></i>我的收藏 </a> <span
+								th:text="${collectionNum}" class="jquery-accordion-menu-label">12
+							</span></li>
+							<li th:if="${islogin}"><a
+								th:href="@{'/'+${user.id}+'/subscribe'}"><i
+									class="fa fa-file-image-o"></i>订阅动态 </a> <span
+								th:text="${SubscribeToRead}" class="jquery-accordion-menu-label">12
+							</span></li>
+							<li th:if="${islogin}"><a href="#"><i class="fa fa-cog"></i>Services
+							</a>
+								<ul class="submenu">
+									<li><a th:href="@{'/'+${user.openid}+'/home'}">个人中心</a></li>
+									<li><a href="#">我的内容</a>
+										<ul class="submenu">
+											<li><a th:href="@{'/article/user/'+${user.id}}">我的文章</a></li>
+											<li><a th:href="@{'/gallery/'+${user.id}+'/1'}">我的相册</a></li>
+										</ul></li>
+									<li><a id="showUserDetail">查看与修改我的名片</a></li>
+									<li><a id="subscribeUsers">我的订阅</a></li>
+								</ul></li>
+							<!--  <li><a href="#"><i class="fa fa-home"></i>系统管理 </a></li> -->
+							<li><a href="#"><i class="fa fa-suitcase"></i>文章 </a>
+								<ul class="submenu">
+									<li><a href="/article/list.php">所有文章</a></li>
+									<li><a href="/article/topic/emotion">心情</a></li>
+									<li><a href="/article/topic/program">编程</a></li>
+									<li><a href="/article/topic/share">分享</a></li>
+									<li><a href="/article/topic/AI">人工智能 </a></li>
+								</ul></li>
+							<li th:if="${islogin}"><a id="logout"><i
+									class="fa fa-user"></i>注销</a></li>
+							<li><a href="#"><i class="fa fa-envelope"></i>Contact </a></li>
+						</ul>
+						<div class="jquery-accordion-menu-footer">geeklemon.cn</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<form onsubmit="return submitFn(this, event);" action="/forsearch"
+			method="post">
+			<div class="search-wrapper">
+				<div class="input-holder">
+					<input type="text" name="search" class="search-input"
+						placeholder="Type to search" />
+					<button class="search-icon" onclick="searchToggle(this, event);">
+						<span></span>
+					</button>
+				</div>
+				<span class="close" onclick="searchToggle(this, event);"></span>
+				<div class="result-container"></div>
+			</div>
+		</form>
+		<div class="container"></div>
+	</header>
+
+	<script type="text/javascript">
+		function searchToggle(obj, evt) {
+			var container = $(obj).closest('.search-wrapper');
+
+			if (!container.hasClass('active')) {
+				container.addClass('active');
+				evt.preventDefault();
+			} else if (container.hasClass('active')
+					&& $(obj).closest('.input-holder').length == 0) {
+				container.removeClass('active');
+				// clear input
+				container.find('.search-input').val('');
+				// clear and hide result container when we press close
+				container.find('.result-container').fadeOut(100, function() {
+					$(this).empty();
+				});
+			}
+		}
+
+		function submitFn(obj, evt) {
+			value = $(obj).find('.search-input').val().trim();
+
+			_html = "Yup yup! Your search text sounds like this: ";
+			if (!value.length) {
+				_html = "Add some text friend :D";
+				$(obj).find('.result-container').html(
+						'<span>' + _html + '</span>');
+				$(obj).find('.result-container').fadeIn(100);
+				evt.preventDefault();
+				return false;
+
+			} else {
+				return true;
+			}
+		}
+	</script>
+	<br />
+	<br />
+	<br />
+	<br />
+	<div class="container">
+		<br />
+		<div class="text-center text-large">
+			<h1 th:text="${article.title}">标题</h1>
+		</div>
+		<br />
+		<div class="button-toolbar">
+			<div class="button-group"
+				th:if="(${islogin} and ${user.level} eq 3) or (${islogin} and ${user.name} eq ${article.author} )">
+				<a th:href="@{/deletearticle(id=${article.id})}"
+					onclick="return del()">
+					<button type="button" class="button">
+						<span class="icon-trash-o text-red"></span>删除
+					</button>
+				</a>
+			</div>
+			<div class="button-group">
+				<button th:attr="artid=${article.id},ownerId=${ownerId}"
+					id="shoucang" type="button" class="button icon-heart-o text-red">
+					收藏</button>
+				<a>
+					<button type="button" class="button icon-thumbs-o-up text-yellow">
+						我赞</button>
+				</a>
+				<button
+					th:if="${islogin} and not (${user.name} eq ${article.author})"
+					type="button" id="subscribe"
+					class="button icon-plus-square text-red">订阅</button>
+				<button th:if="not ${islogin}" type="button" id="subscribe"
+					class="button icon-plus-square text-red">订阅</button>
+			</div>
+		</div>
+		<br /> <br />
+		<div>
+			<span class="badge bg-main"><a
+				th:text="'&nbsp;'+${article.author}"
+				th:href="@{'/user/'+${article.authorid}+'/home'}">作者</a></span>&nbsp;  <a
+				class="badge bg-sub" th:text="'&nbsp;'+${article.subject}"
+				th:href="@{'/user/'+${article.authorid}+'/topic/'+${article.subject}+'/list'}">主题</a>&nbsp;
+			<span th:text="'&nbsp;&nbsp;'+${article.time}">2019-1-1</span>
+		</div>
+		<br /> <br />
+		<div id="UEtoBeautycontent" class="container"
+			th:utext="${article.content}">neir</div>
+		<div>
+			<script>
+				function del() {
+					if (confirm("真的要删除该条记录吗?")) {
+						return true;
+					} else {
+						return false;
+					}
+				}
+			</script>
+		</div>
+	</div>
+	<hr class="bg-mix" />
+	<!--下一篇 上一篇-->
+	<div class="line">
+		<div class="container xl12 xm6" style="padding-left: 5%">
+			<p>
+			<div>
+				&nbsp;&nbsp;上一篇&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;<a
+					th:if="${previous}" th:text="${previous.title}"
+					th:href="@{'/article/detail/'+${previous.id}}"></a>
+			</div>
+			</p>
+			<p>
+			<div>
+				&nbsp;&nbsp;下一篇&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;<a
+					th:if="${next}" th:text="${next.title}"
+					th:href="@{'/article/detail/'+${next.id}}">下一篇标题</a>
+			</div>
+			</p>
+		</div>
+		<div class="xm6 hidden-l text-center">
+			&nbsp; &nbsp;&nbsp; &nbsp; <a href="/article/topic/program"><span
+				class="badge bg-sub swing-hover">编程</span></a>&nbsp; &nbsp;&nbsp; &nbsp;
+			&nbsp; &nbsp; <a href="/article/topic/AI"> <span
+				class="badge bg-blue-light swing-hover">人工智能</span></a> <br /> <br />
+			&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
+			<a href="/article/topic/share"><span
+				class="badge bg-mix swing-hover">分享</span></a>&nbsp; &nbsp;&nbsp; &nbsp;
+			<a href="/article/topic/emotion"><span
+				class="badge bg-green-light swing-hover">心情</span></a>
+		</div>
+	</div>
+	<hr class="bg-mix" />
+	<!--评论-->
+	<div class="container" id="commentTestModal">
+		<button class="button bg-sub radius-rounded"
+			onclick="showCommentModal()">评论</button>
+		<div class="panel">
+			<ul class="list-group" id="commentList"
+				th:each="comment : ${comments}">
+				<li>
+					<div class="panel-body">
+						<p th:text="|${comment.user}:${comment.time}|">用户</p>
+						<p th:utext="${comment.content}">
+							用户评论
+						</p><a th:attr="parentid=${comment.id},towho=null" class="button button-little border-blue swing-hover radius-rounded"
+								onclick="answerComment(this)">回复</a>
+						<ul class="list-group" th:if="${comment.childrenComments}" th:each="childCom : ${comment.childrenComments}">
+							<li>
+								<p th:if="${childCom.towho}" th:text="${childCom.user}+'回复'+${childCom.towho}+':'+${childCom.content}">
+								<p th:if="not ${childCom.towho}" th:text="${childCom.user}+'说:'+${childCom.content}">
+							</li>
+						</ul>
+						<a th:if="${comment.childrenComSize} gt 1" th:attr="commentId=${comment.id}" onclick="showCommentList(this)" class="button button-little border-blue radius-rounded">查看</a>
+						<hr class="bg-mix" />
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<hr class="bg-sub" />
+
+	<button id="commentBtn" th:if="${islogin}" onclick="showCommentModal()"
+		class="button bg-sub radius-rounded"
+		style="position: fixed; position: -ms-device-fixed; bottom: 55px; right: 46%; z-index: 9999">
+		评论</button>
+
+	<button id="commentBtn" th:if="${not islogin}"
+		class="button bg-sub radius-rounded ajaxLogin"
+		style="position: fixed; position: -ms-device-fixed; bottom: 55px; right: 48%; z-index: 9999">
+		评论</button>
+	<!--评论modal-->
+	<div class="container hidden" th:if="${islogin}" style="width: 100%"
+		id="commentModal">
+		<form method="post">
+			<h6 class="badge bg-mix" style="text-align: center">你的评论</h6>
+			<br />
+			<textarea id="comment" rows="5" style="width: 100%" name="comment"
+				class="input" placeholder="评论"></textarea>
+			<br />
+			<button class=" bg-green-light button-small radius-rounded"
+				type="button" id="doComment">提交</button>
+			<button class="bg-main">
+				<a onclick="showLongCommentIframe()">长评论(可添加代码等)</a>
+			</button>
+			<button
+				class=" button-small bg-green-light float-right radius-rounded"
+				onclick="closeComModal()" type="button">取消</button>
+		</form>
+	</div>
+	<a href="#" class="scrollup"></a>
+
+	<div style="display: none" id="loginuser" th:if="${islogin}"
+		th:attr="loginuser=${user.id}"></div>
+	<script src="/js/footer.js"></script>
+	<script src="/js/shoucang.js"></script>
+	<script src="/js/string-format.js"></script>
+	<script type="application/javascript" src="/js/comment.js"></script>
+
+	<!-- 编辑器-->
+	<script type="text/javascript" src="/ueditor.config.js"></script>
+	<script type="text/javascript" src="/ueditor.all.js"></script>
+
+	<script>
+		shoucang();
+		SyntaxHighlighter.all();//执行代码高亮
+
+		// $(function () {
+		//     uParse("#UEtoBeautycontent", {rootPath: "/js"});
+		// })
+		$("img").on('error',function(e){
+			$(this).attr('display','none');
+		});
+	</script>
+</body>
+
+</html>

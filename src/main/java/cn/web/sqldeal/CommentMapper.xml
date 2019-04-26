@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.web.sqldeal.CommentMapper">
+    <resultMap type="cn.web.model.Comment" id="comment">
+        <id property="id" column="id"/>
+        <result property="content" column="content"/>
+        <result property="user" column="user"/>
+        <result property="articleid" column="articleid"/>
+        <result property="time" column="time"/>
+        <result property="parentid" column="parentid"/>
+        <result property="userid" column="userid"/>
+        <result property="towho" column="towho"/>
+    </resultMap>
+    <resultMap type="cn.web.sqldeal.NewComment" id="newComment">
+        <id property="id" column="id"/>
+        <result property="content" column="content"/>
+        <result property="user" column="user"/>
+        <result property="articleid" column="articleid"/>
+        <result property="time" column="time"/>
+        <result property="parentid" column="parentid"/>
+        <result property="userid" column="userid"/>
+        <result property="towho" column="towho"/>
+        <!--- column作为传递的参数，名称与此相同 -->
+        <collection property="childrenComments" column="id" ofType="comment"
+                    select="selectChildrenCommentById"></collection>
+    </resultMap>
+    <select id="get5Comments" parameterType="int" resultMap="newComment">
+	select * from comment where articleId=#{articleId} and parentid = 0
+	order by id desc limit 0,5
+	</select>
+    <select id="getAllComments" parameterType="int" resultMap="newComment">
+		select * from comment com  where articleId=#{articleId} and parentid =0 order by id desc
+	</select>
+    <select id="getComentById" parameterType="int" resultMap="newComment">
+		select * from comment where id =#{id}
+	</select>
+    <select id="selectChildrenCommentById" resultMap="comment" parameterType="int">
+		select * from comment where parentid = #{id} and towho is null order by id desc limit 0,3
+	</select>
+</mapper>

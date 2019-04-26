@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+<meta charset="utf-8" />
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
+<title th:text="${title}">Articles</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="" />
+<!-- 
+Tamarillo Template
+http://www.templatemo.com/tm-399-tamarillo
+-->
+<meta name="author" content="" />
+<!-- favicons -->
+<link rel="shortcut icon" href="images/favicon.ico" />
+<!-- bootstrap core CSS -->
+<link href="css/bootstrap.min.css" rel="stylesheet" />
+<!-- fancybox CSS -->
+<link href="css/jquery.lightbox.css" rel="stylesheet" />
+<!-- flex slider CSS -->
+<link href="css/flexslider.css" rel="stylesheet" />
+<!-- custom styles for this template -->
+<link href="css/templatemo_style.css" rel="stylesheet" />
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+<![endif]-->
+<link rel="stylesheet" type="text/css" href="css/search-form.css">
+<script src="js/jquery-1.10.1.min.js"></script>
+<script src="js/script.js"></script>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+	<header>
+		<span class="toggle-button">
+			<div class="menu-bar menu-bar-top"></div>
+			<div class="menu-bar menu-bar-middle"></div>
+			<div class="menu-bar menu-bar-bottom"></div>
+		</span>
+		<div class="menu-wrap">
+			<div class="menu-sidebar">
+				<ul class="menu">
+					<li th:if="${not islogin}"><a th:href="@{/login}">login</a></li>
+					<li th:if="${islogin}"><img
+							th:src="@{'images/userlogo/'+${user.userlogo}}"
+							th:text="${user.name}" />
+					</li>
+					<li><a href="/">首页</a></li>
+					<li class="menu-item-has-children" ><a
+						href="/article">文章</a> <span class="sidebar-menu-arrow">+</span>
+						<ul class="sub-menu">
+							<li><a href="/topic?subject=emotion">情感</a></li>
+							<li><a href="/topic?subject=program">编程</a></li>
+							<li><a href="/topic?subject=share">分享</a></li>
+						</ul>
+					</li>
+					<li><a href="/information">资讯</a></li>
+					<li class="menu-item-has-children" th:if="${islogin}"><a
+						th:href="@{/usercenter(user=${user.name})}">个人中心</a><span class="sidebar-menu-arrow">+</span>
+						<ul class="sub-menu" th:if="${user.level} gt 0">
+							<li><a href="/manage?write=writearticle">写文章</a></li>
+							<li><a href="/manage?write=writeblog">写博客</a></li>
+							<li th:if="${user.level} gt 1"><a href="/manage?write=upgallery">传相册</a></li>
+							
+						</ul>
+					</li>
+					<li></li>
+					<li th:if="${islogin}"><a href="/quit">注销</a></li>
+				</ul>
+			</div>
+		</div>
+		<form onsubmit="return submitFn(this, event);" action="/forsearch"
+			method="post">
+			<div class="search-wrapper">
+				<div class="input-holder">
+					<input type="text" name="search" class="search-input"
+						placeholder="Type to search" />
+					<button class="search-icon" onclick="searchToggle(this, event);">
+						<span></span>
+					</button>
+				</div>
+				<span class="close" onclick="searchToggle(this, event);"></span>
+				<div class="result-container"></div>
+			</div>
+		</form>
+		<div class="container"></div>
+	</header>
+	<!-- end of templatemo_header -->
+
+
+	<script type="text/javascript">
+	function searchToggle(obj, evt){
+		var container = $(obj).closest('.search-wrapper');
+
+		if(!container.hasClass('active')){
+			  container.addClass('active');
+			  evt.preventDefault();
+		}
+		else if(container.hasClass('active') && $(obj).closest('.input-holder').length == 0){
+			  container.removeClass('active');
+			  // clear input
+			  container.find('.search-input').val('');
+			  // clear and hide result container when we press close
+			  container.find('.result-container').fadeOut(100, function(){$(this).empty();});
+		}
+	}
+
+	function submitFn(obj, evt){
+		value = $(obj).find('.search-input').val().trim();
+
+		_html = "Yup yup! Your search text sounds like this: ";
+		if(!value.length){
+			_html = "Add some text friend :D";
+			$(obj).find('.result-container').html('<span>' + _html + '</span>');
+		    $(obj).find('.result-container').fadeIn(100);
+			evt.preventDefault();
+			return false;
+	      
+		}
+		else{
+			return true;
+		}
+	}
+</script>
+
+	<section id="templatemo_slideshow">
+		<div class="container">
+		</div>
+	</section>
+<div style="text-align:center"><a th:href="@{${top.href}}" style="margin:0 auto"><img src="images/default.png" th:src="@{${top.src}}" height=110px width=110px></img></a>
+		<h2 th:text="${top.text}">name</h2>
+		<p th:if="${top.autograph}" th:text="${top.autograph}"></p>
+		
+</div>
+	<div class="solidline"></div>
+	<!-- end of templatemo_slideshow -->
+	<section id="templatemo_about">
+		<div class="container">
+			<div class="row">
+				<h1>Articles</h1>
+			</div>
+			<ul th:each="article : ${articles}">
+				<li>
+					<div class="row">
+						<div class="col-md-1"></div>
+						<div class="col-md-5 col-sm-7 col-xs-24">
+							<a href="#" th:href="@{/detail(id=${article.id})}"> <img
+								src="images/templatemo_image_1.jpg"
+								th:src="@{'images/'+${article.src}}" alt="image 1" /></a>
+						</div>
+						<div class="col-md-1"></div>
+						<div class="col-md-16">
+							<h2 th:text="${article.title}">Responsive HTML5 Template</h2>
+							<p>
+								<span class="glyphicon glyphicon-bookmark"><a style="text-decoration:none" th:href="@{/usertopic(subject=${article.subject},author=${article.author})}" th:text="'&nbsp;'+${article.subject}+'&nbsp;'"></a></span>
+								<span class="glyphicon glyphicon-user"><a style="text-decoration:none" th:href="@{/usercenter(user=${article.author})}" th:text="'&nbsp;'+${article.author}+'&nbsp;'"></a></span> 
+								<span class="glyphicon glyphicon-calendar" th:text="'&nbsp;'+${article.time}+'&nbsp;'"></span>
+								<span th:if="${islogin} and ${user.level} eq 3" ><a th:href="@{/deletearticle(id=${article.id})}" onclick="return del()">删除</a></span>
+							</p>
+							<p th:text="${article.description}">Tamarillo is free HTML5
+								template that can be adapted and used for your websites. 
+								</p>
+							<a href="#" th:href="@{/detail(id=${article.id})}"
+								class="btn btn-default" onmousemove="window.status=''">详情</a>
+						</div>
+					</div>
+					<!-- end of row -->
+					
+				<script>
+				function del(){
+					if(confirm("真的要删除该条记录吗?")){
+					return true;
+					}else{
+					return false;
+					}
+					}
+				</script>
+				</li>
+			</ul>
+		</div>
+
+		<div style="text-align: center" th:if="${topic}">
+			<a th:href="@{/usertopic(pageNum=${1},author=${author},subject=${subject})}">首页</a> 
+			<a th:if="${not isFirstPage}"
+				th:href="@{/usertopic(pageNum=${pageNum-1},author=${author},subject=${subject})}"
+				class="btn btn-default">Previous</a> 
+			<a th:if="${isFirstPagee}"
+				href="javascript:void(0);">Previous</a> 
+			<a href="#"	th:text="'['+${pageNum}+']'"></a> 
+			<a th:if="${not isLastPage}"
+				th:href="@{/usertopic(pageNum=${pageNum+1},author=${author},subject=${subject})}"
+				class="btn btn-default">Next</a>
+			<!--    <a th:if="${isLastPage}" href="javascript:void(0);">Next</a>  -->
+			<a th:href="@{${'/usertopic'}(pageNum=${totalPages},author=${author},subject=${subject})}">尾页</a> <span
+				th:text="'共'+${totalPages}+'页'"></span>
+		</div>
+		
+		<div style="text-align: center" th:if="not ${topic}">
+			<a th:href="@{${'/userarticle'}(pageNum=${1},user=${author})}">首页</a> 
+			<a th:if="${not isFirstPage}"
+				th:href="@{${'/userarticle'}(pageNum=${pageNum-1},user=${author})}"
+				class="btn btn-default">Previous</a> 
+			<a th:if="${isFirstPagee}"
+				href="javascript:void(0);">Previous</a> 
+			<a href="#"	th:text="'['+${pageNum}+']'"></a> 
+			<a th:if="${not isLastPage}"
+				th:href="@{${'/userarticle'}(pageNum=${pageNum+1},user=${author})}"
+				class="btn btn-default">Next</a>
+			<!--    <a th:if="${isLastPage}" href="javascript:void(0);">Next</a>  -->
+			<a th:href="@{${'/userarticle'}(pageNum=${totalPages},user=${author})}">尾页</a> <span
+				th:text="'共'+${totalPages}+'页'"></span>
+		</div>
+		
+
+	</section>
+	<!-- end of templatemo_about -->
+	<div class="container">
+		<div class="solidline"></div>
+	</div>
+	<!-- solid line -->
+
+	<section id="templatemo_contact">
+		<div class="container">
+			<div class="row" id="templatemo_contact_gray_wap">
+				<div class="col-md-24 col-sm-24">
+					<h1 class="margin_top">Contact</h1>
+				</div>
+				<div class="col-md-9 col-sm-18 col-sm-push-3">
+					<p>
+						<span class="glyphicon glyphicon-home"></span>&nbsp;&nbsp;已隐藏
+						 <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;已隐藏
+						<br /> <span
+							class="glyphicon glyphicon-phone-alt"></span>&nbsp;&nbsp; Tel:
+						已隐藏<br /> <span class="glyphicon glyphicon-envelope"></span>&nbsp;&nbsp;
+						Email: 2235733868@qq.com<br /> <span
+							class="glyphicon glyphicon-globe"></span>&nbsp;&nbsp; Website:
+						www.zonghengnet.cn
+					</p>
+				</div>
+				<div class="col-md-1"></div>
+			 <!--  
+			 <div class="col-md-9  col-sm-18 col-sm-push-3">
+					<form id="contact-form" action="#templatemo_contact" method="post">
+						<label> <span>Name</span> <input name="name" type="text"
+							id="name" maxlength="40" />
+						</label> <label> <span>Email</span> <input name="email"
+							type="text" id="email" maxlength="40" />
+						</label> <label> <span>Subject</span> <input name="subject"
+							type="text" id="subject" maxlength="100" />
+						</label> <label> <span>Message</span> <textarea name="message"
+								id="message"></textarea>
+						</label> <label>
+							<button name="submit" type="submit">Send</button>
+						</label>
+					</form>
+				</div>
+				-->
+			</div>
+			<!-- end of row -->
+			<div class="row" id="templatemo_footer">
+				<div class="col-md-24">
+					<p>Copyright 2017 gudeying</p>
+				</div>
+			</div>
+			<!-- end of templatemo_footer -->
+		</div>
+		<a href="#" class="scrollup"><i class="fa fa-angle-up active"></i></a>
+	</section>
+	<!-- end of templatemo_contact -->
+	<script src="js/jquery.min.js"></script>
+	<script src="js/jquery.scrollto.min.js"></script>
+	<script src="js/jquery.easing.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<!-- templatemo 399 tamarillo -->
+</body>
+</html>

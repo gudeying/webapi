@@ -1,0 +1,33 @@
+/target/
+.mvn/
+/src/main/resources/static/images/
+/src/main/resources/static/image/
+/src/main/main.iml
+/out/
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/build/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+read.txt
+
+mvnw
+mvnw.cmd

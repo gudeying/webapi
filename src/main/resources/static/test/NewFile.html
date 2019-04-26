@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Bootstrap 实例 - 模态框（Modal）插件</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/search-form.css">
+    <link href="css/font-awesome.css" rel="stylesheet" type="text/css" />
+    <script src="http://www.pintuer.com/js/jquery.js"></script>
+    <script src="http://www.pintuer.com/js/pintuer.js"></script>
+    <script src="http://www.pintuer.com/plugins/respond.js"></script>
+    <script src="js/layer.js"></script>
+</head>
+
+<body>
+<style>
+    .edit{display: none}
+    #editFile{display: none}
+</style>
+<h2>创建模态框（Modal）</h2>
+<!-- 按钮触发模态框 -->
+<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+    开始演示模态框
+</button>
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    名片
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div>
+                        <div style="overflow:hidden;word-break:break-all;font-family:'PingFangSC-Regular', Tahoma, Arial, 'Hiragino Sans GB', 'WenQuanYi Micro Hei', 'Microsoft YaHei', 宋体, sans-serif"
+                             f="MailSignatureTemplate" aliyun_disable_scale="1">
+                            <table id="wrap" style="border-collapse: collapse;width: 500px;margin: 0;border-radius: 4px;background: #FFFFFF;border: 1px solid #E2E2E2">
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <table style="border-collapse: collapse;border: none">
+                                            <tbody>
+                                            <tr>
+                                                <td width="96" valign="top">
+                                                    <div style="margin-top: 8px">
+                                                        <img width="96" height="96" style="border-radius: 50%;border:none"
+                                                             id="userLogo" src="images/1.jpg" />
+                                                        <button type="button" id="uploadUserLogo" onclick="userLogoFile.click()"
+                                                                style="display: none">更改</button>
+                                                        <input type="file" id="userLogoFile" onchange="loadImg()"
+                                                               style="display: none" />
+                                                        <span id="editFile" onclick="enableshowUserLogoFile()">编辑</span>
+                                                    </div>
+                                                </td>
+                                                <td width="16"></td>
+                                                <td valign="top" style="width: 252px">
+                                                    <div style="margin-top: 8px;line-height: 30px;font-family: PingFangSC-Medium;font-size: 16px;color: #191F25;">
+                                                        <input class="userDetail" readonly="readonly" style="border-style:none"
+                                                               name="userName" type="text" value="姓名" />
+                                                        <span class="edit" style="float: right;font-size: 12px;">编辑</span>
+                                                    </div>
+                                                    <div style="padding-bottom: 4px;line-height: 25px;font-size: 12px;color: #191F25;font-family: PingFangSC-Medium">
+                                                        <span name="org_name">年龄</span>
+                                                        <span style="padding-left: 8px" name="position"></span><input
+                                                            readonly="readonly" name="userAge" class="userDetail"
+                                                            style="border-style:none" type="text" value="20">
+                                                        <span class="edit" id="lalala" style="float: right">编辑</span>
+                                                    </div>
+                                                    <div style="padding-bottom: 4px;line-height: 25px;font-size: 12px;color: #191F25;font-family: PingFangSC-Medium">
+                                                        <span name="org_name">邮箱</span>
+                                                        <span style="padding-left: 8px" name="mail"></span>
+                                                        <input readonly="readonly" name="userEmail" class="userDetail"
+                                                               style="border-style:none" type="text" value="2235733868@qq.com">
+                                                        <span class="edit" style="float: right">编辑</span>
+                                                    </div>
+
+                                                    <div style="line-height: 16px;font-size: 11px;color: #A3A4A6"
+                                                         name="address">
+                                                        <span name="org_name">性别</span>
+                                                        <span style="padding-left: 8px" name="position">男</span>
+                                                    </div>
+                                                    <div style="line-height: 16px;font-size: 11px;color: #A3A4A6"
+                                                         name="zipcode">
+                                                    </div>
+                                                </td>
+
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <div style="margin-top: 10px;border-top: 1px solid #E2E2E2;padding-top: 10px">
+                                            <table style="border-collapse: collapse;border: none;width: 100%;line-height:32px">
+                                                <tbody>
+                                                <tr>
+                                                    <td width="8"></td>
+                                                    <td align="left" style="max-width: 100%;" valign="middle">
+                                                        <input style="border-style:none" name="userAutographContent"
+                                                               id="autographContent" readonly="readonly"
+                                                               maxlength="30" value="lalalaalallalalaallal" />
+
+                                                    </td>
+                                                    <td align="right" valign="middle"> <button onclick="showEdit(this)">
+                                                        更改 </button> </td>
+                                                    <td width="16" valign="middle"></td>
+                                                </tr>
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div style="line-height: 20px;font-size: 11px;color: #191F25;padding-top:16px;margin-top:10px;text-align: center;border-top: 1px solid #e2e2e2;display:none">
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" id="submitUserDetail" disabled="disabled" style="display: none" onclick="editUserDetail()"
+                            class="btn btn-primary">
+                        提交更改
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    <script>
+        function edit() {
+            // autographContent可编辑
+            $("#autographContent").attr("readonly", false);
+            $("#autographContent").focus();
+        }
+
+        function showEdit() {
+            // 显示“编辑”按钮
+            $(".edit").show(); //姓名年龄
+            $("#editFile").show(); //logo
+            edit(); //签名
+            $("#submitUserDetail").show();
+            $("#submitUserDetail").attr("disabled", false);
+        }
+
+        function enableshowUserLogoFile() {
+            $("#uploadUserLogo").show();
+        }
+
+        function editUserDetail(arg) {
+            var formdata = new FormData();
+            var $input = $("input[name^='user']");
+            $input.each(function () {
+                if (!Boolean($(this).attr("readonly"))) {
+                    formdata.append($(this).attr("name"), $(this).val());
+                }
+            });
+            if (Boolean($("#userLogoFile")[0].files[0])) {
+                formdata.append("userLogo", $("#userLogoFile")[0].files[0]);
+            }
+            $.ajax({
+                url: "/userDetail",
+                type: 'POST',
+                data: formdata,
+                dataType: 'JSON',
+                cache: false,
+                processData: false,
+                contentType: false,
+                error: function () {
+                    layer.msg(data["message"], {
+                        icon: 2,
+                        time: 1000,
+                        shade: 0.2
+                    });
+                },
+                success: function (data) {
+                    if (!data["result"]) {
+                        layer.msg(data["message"], {
+                            icon: 2,
+                            time: 1000,
+                            shade: 0.2
+                        });
+                    } else {
+                        layer.msg("修改成功", {
+                            icon: 1,
+                            time: 500,
+                            shade: 0.2
+                        }, function () {
+                            location.reload();
+                        });
+                    }
+                }
+            })
+        }
+
+        $(".edit").on("click", function () {
+            $(this).prev().attr("readOnly", false);
+            $(this).prev().focus();
+        })
+
+        function loadImg() {
+            var animateimg = $("#userLogoFile").val(); //获取上传的图片名 带//
+            var imgarr = animateimg.split('\\'); //分割
+            var myimg = imgarr[imgarr.length - 1]; //去掉 // 获取图片名
+            var houzui = myimg.lastIndexOf('.'); //获取 . 出现的位置
+            var ext = myimg.substring(houzui, myimg.length).toUpperCase(); //切割 . 获取文件后缀
+
+            var file = $('#userLogoFile').get(0).files[0]; //获取上传的文件
+            var fileSize = file.size; //获取上传的文件大小
+            var maxSize = 1048576; //最大1MB
+            if (ext != '.PNG' && ext != '.GIF' && ext != '.JPG' && ext != '.JPEG' && ext != '.BMP') {
+
+                layer.msg('文件类型错误,请上传图片类型');
+                $("#userLogoFile")[0].files[0] = null;
+                return false;
+
+            } else if (parseInt(fileSize) >= parseInt(maxSize)) {
+                layer.msg('上传的文件不能超过1MB');
+                $("#userLogoFile")[0].files[0] = null;
+                return false;
+
+            } else {
+                if (window.FileReader) {
+                    var fr = new FileReader();
+                    fr.onloadend = function (e) {
+                        var img = document.getElementById("userLogo");
+                        img.setAttribute("src", e.target.result);
+                        img.setAttribute("alt", "");
+                    };
+                    fr.readAsDataURL(file);
+                }
+                return false;
+            }
+        }
+    </script>
+</div>
+</body>
+
+</html>

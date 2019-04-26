@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head>
+    <meta charset="utf-8" />
+    <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
+    <title th:text="${title}">title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <!-- favicons -->
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <!-- bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- custom styles for this template -->
+    <link href="/css/templatemo_style.css" rel="stylesheet" />
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="/css/search-form.css">
+    <script src="/js/jquery-1.10.1.min.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="/css/jquery-accordion-menu.css" rel="stylesheet" type="text/css" />
+    <link href="/css/font-awesome.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="/css/pintuer.css" />
+    <!--     <script src="http://www.pintuer.com/js/jquery.js"></script> -->
+    <script src="/js/pintuer.js"></script>
+    <script src="/js/respond.js"></script>
+    <script src="/js/layer.js"></script>
+    <style type="text/css">
+        * {
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+        }
+
+        .filterinput {
+            background-color: rgba(249, 244, 244, 0);
+            border-radius: 15px;
+            width: 90%;
+            height: 30px;
+            border: thin solid #FFF;
+            text-indent: 0.5em;
+            font-weight: bold;
+            color: #FFF;
+        }
+
+        #demo-list a {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            -o-text-overflow: ellipsis;
+            white-space: nowrap;
+            width: 100%;
+        }
+    </style>
+    <!--   <script src="js/jquery-1.11.2.min.js" type="text/javascript"></script> -->
+    <script src="/js/jquery-accordion-menu.js" type="text/javascript"></script>
+</head>
+
+<body style="height: 100%">
+<header>
+    <div class="container" id="menuctrl" style="padding-left:0;margin-left:0">
+        <div class="toggle-menu">
+                <span class="toggle-button">
+            <div class="menu-bar menu-bar-top"></div>
+            <div class="menu-bar menu-bar-middle"></div>
+            <div class="menu-bar menu-bar-bottom"></div>
+        </span>
+            <div class="mymenu">
+                <div id="jquery-accordion-menu" class="jquery-accordion-menu red">
+                    <div class="jquery-accordion-menu-header" id="form"></div>
+                    <ul id="demo-list">
+                        <li th:if="${not islogin}"><a id="ajaxLogin" ><i class="fa fa-user"></i>login</a></li>
+                        <li th:if="${islogin}"><a th:href="@{/usercenter(user=${user.name})}"><i class="fa fa-user"></i><span th:text="${user.name}">用户名</span></a>
+                        </li>
+                        <li class="active"><a href="/"><i class="fa fa-home"></i>首页 </a></li>
+                        <li><a href="#"><i class="fa fa-glass"></i>创作 </a>
+                            <ul class="submenu" >
+                                <li><a href="/manage?write=writearticle">写文章</a></li>
+                                <li><a href="/manage?write=writeblog">写博客</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#"><i class="fa fa-file-image-o"></i>Gallery </a><span class="jquery-accordion-menu-label">
+                12 </span></li>
+                        <li th:if="${islogin}"><a href="#"><i class="fa fa-cog"></i>Services </a>
+                            <ul class="submenu">
+                                <li><a th:href="@{/usercenter(user=${user.name})}">个人中心</a></li>
+                                <li><a href="#">我的内容</a>
+                                    <ul class="submenu">
+                                        <li><a th:href="@{'/article/user/'+${user.id}}">我的文章</a></li>
+                                        <li><a href="#">我的相册</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="/completeuser">修改个人信息</a></li>
+                            </ul>
+                        </li>
+                        <!--  <li><a href="#"><i class="fa fa-home"></i>系统管理 </a></li> -->
+                        <li><a href="#"><i class="fa fa-suitcase"></i>文章 </a>
+                            <ul class="submenu">
+                                <li><a href="/article/list.php">所有文章</a></li>
+                                <li><a href="/topic?subject=emotion">心情</a></li>
+                                <li><a href="/topic?subject=program">编程</a></li>
+                                <li><a href="/topic?subject=share">分享</a></li>
+                                <li><a href="/topic?subject=AI">人工智能 </a></li>
+                            </ul>
+                        </li>
+                        <li th:if="${islogin}"><a id="logout"><i class="fa fa-user"></i>注销</a></li>
+                        <li><a href="#"><i class="fa fa-envelope"></i>Contact </a></li>
+                    </ul>
+                    <div class="jquery-accordion-menu-footer">
+                        geeklemon.cn
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form onsubmit="return submitFn(this, event);" action="/forsearch" method="post">
+        <div class="search-wrapper">
+            <div class="input-holder">
+                <input type="text" name="search" class="search-input" placeholder="Type to search" />
+                <button class="search-icon" onclick="searchToggle(this, event);">
+                    <span></span>
+                </button>
+            </div>
+            <span class="close" onclick="searchToggle(this, event);"></span>
+            <div class="result-container"></div>
+        </div>
+    </form>
+    <div class="container"></div>
+</header>
+<script type="text/javascript">
+    function searchToggle(obj, evt) {
+        var container = $(obj).closest('.search-wrapper');
+
+        if (!container.hasClass('active')) {
+            container.addClass('active');
+            evt.preventDefault();
+        } else if (container.hasClass('active') && $(obj).closest('.input-holder').length == 0) {
+            container.removeClass('active');
+            // clear input
+            container.find('.search-input').val('');
+            // clear and hide result container when we press close
+            container.find('.result-container').fadeOut(100, function() { $(this).empty(); });
+        }
+    }
+
+    function submitFn(obj, evt) {
+        value = $(obj).find('.search-input').val().trim();
+
+        _html = "Yup yup! Your search text sounds like this: ";
+        if (!value.length) {
+            _html = "Add some text friend :D";
+            $(obj).find('.result-container').html('<span>' + _html + '</span>');
+            $(obj).find('.result-container').fadeIn(100);
+            evt.preventDefault();
+            return false;
+
+        } else {
+            return true;
+        }
+    }
+</script>
+<br />
+<br />
+<br />
+<style>
+    img {
+        width: 100%;
+    }
+    small {
+        display: inline-block;
+        min-width: 10px;
+        padding: 3px 7px;
+        font-size: 12px;
+        font-weight: normal;
+        line-height: 1;
+        color: #468847;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: baseline;
+        background-color: #dff0d8;
+        border-radius: 10px;
+        font-family: Consolas,"Courier New",monospace;
+        margin-bottom: 5px;
+        opacity: 0.8;
+
+    }
+    .list-group {
+        padding: 0;
+        margin-top: 30px;
+        position: relative;
+    }
+    .list-group li{
+        list-style: none;
+        padding: 10px;
+        width: 21%;
+        float: left;
+    }
+
+    h6 {
+        margin: 0;
+        text-align: center;
+    }
+
+    ul>small {
+        position: absolute;
+        top: -10px;
+    }
+
+    .page-header {
+        border-bottom: 1px solid #eee;
+        font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    }
+    .page-header h1 {
+        margin-bottom: 5px;
+        line-height: 1;
+        color: #4B4B4B;
+        font-weight: 200;
+        margin-left: 8px;
+    }
+    .page-header h2 {
+        font-weight: 100;
+        padding-bottom: 0;
+        padding-top: 0;
+        margin-top: 0;
+        margin-left: 8px;
+    }
+
+    * {
+        line-height: 1.5;
+    }
+    h1, h2, h3, p {
+        line-height: 1.5;
+    }
+    h2 {
+        color: #ccc;
+        font-size: 20px;
+    }
+
+    .album img {
+
+    }
+    #search {
+        margin-top: 20px;
+        padding: 5px;
+        width: 200px;
+    }
+    label {
+        font-size: 12px;
+    }
+    .avatar {
+        border-radius: 50%;
+        width: 50px;
+        float: left;
+        margin-right: 15px;
+        padding-left: 5px;
+    }
+
+</style>
+</head>
+
+<body>
+<div class="page-header">
+    <div class="container">
+        <img src="images/coldplay.jpg" th:src="@{/${top.src}}" class="avatar" alt="">
+        <h1>相册</h1>
+        <h2 th:text="${top.text}">gallery</h2>
+    </div>
+</div>
+
+<div class="container">
+    <ul >
+        <ul class="thumbs row">
+            <li class="col-sm-1 hidden-xs"></li>
+            <li class="item-thumbs col-sm-6 col-xs-8">
+                <div>
+                    <a class="swipebox" data-lightbox="gallery"
+                       data-caption="啦啦啦" onclick="showImg()"
+                       href="images/viva.jpg">
+                        <span class="icon-lightbulb-o"></span>
+                    </a> <img src="images/viva.jpg" alt="image" />
+                </div><br/>
+                <h6><span class="badge bg-mix swing-hover "><a data="images/viva.jpg">删除</a></span></h6>
+            </li>
+            <li class="item-thumbs col-sm-6 col-xs-8">
+                <div>
+                    <a class="swipebox" data-lightbox="gallery"
+                       data-caption="啦啦啦"
+                       href="images/viva.jpg">
+                        <span class="glyphicon glyphicon-zoom-in"></span>
+                    </a> <img src="images/viva.jpg" alt="image" />
+                </div>
+                <h6><span class="badge bg-mix swing-hover"><a data="images/viva.jpg">删除</a></span></h6>
+            </li>
+            <li class="item-thumbs col-sm-6 col-xs-8">
+                <div>
+                    <a class="swipebox" data-lightbox="gallery"
+                       data-caption="啦啦啦"
+                       href="images/viva.jpg">
+                        <span class="glyphicon glyphicon-zoom-in"></span>
+                    </a> <img src="images/viva.jpg" alt="image" />
+                </div>
+                <h6><span class="badge bg-mix swing-hover"><a data="images/viva.jpg">删除</a></span></h6>
+            </li>
+            <li class="col-md-1 col-sm-1 hidden-xs"></li>
+        </ul>
+        <ul class="thumbs row">
+            <li class="col-sm-1 hidden-xs"></li>
+            <li class="item-thumbs col-sm-6 col-xs-8">
+                <div>
+                    <a class="overlay" data-lightbox="gallery"
+                       data-caption="啦啦啦" onclick="showImg(this)"
+                       data="images/viva.jpg">
+                        <span class="icon-lightbulb-o"></span>
+                    </a> <img src="images/viva.jpg" alt="image" />
+                </div>
+                <h6 class="editor hidden"><span class="badge bg-mix swing-hover"><a data="images/viva.jpg">删除</a></span></h6>
+            </li>
+            <li class="item-thumbs col-sm-6 col-xs-8">
+                <div>
+                    <a class="overlay" data-lightbox="gallery"
+                       data-caption="啦啦啦" onclick="showImg(this)"
+                       data="images/viva.jpg">
+                        <span class="icon-lightbulb-o"></span>
+                    </a> <img src="images/viva.jpg" alt="image" />
+                </div>
+                <h6 class="editor hidden"><span class="badge bg-mix swing-hover"><a data="images/viva.jpg">删除</a></span></h6>
+            </li>
+            <li class="item-thumbs col-sm-6 col-xs-8">
+                <div>
+                    <a class="overlay" data-lightbox="gallery"
+                       data-caption="啦啦啦" onclick="showImg(this)"
+                       data="images/viva.jpg">
+                        <span class="icon-lightbulb-o"></span>
+                    </a> <img src="images/viva.jpg" alt="image" />
+                </div>
+                <h6 class="editor hidden"><span class="badge bg-mix swing-hover"><a onclick="deletgallery(this)" data="36">删除</a></span></h6>
+            </li>
+            <li class="col-md-1 col-sm-1 hidden-xs"></li>
+        </ul>
+    </ul>
+
+</div>
+<hr class="bg-sub" />
+<div class="container" >
+    <input type="button"onclick="layerShow()" value="上传图片"class="button bg-sub radius-rounded " />
+    <button id="editor" class="button bg-sub radius-rounded float-right" onclick="geditor()">
+        编辑</button><br>
+</div>
+<!--<script src="js/jquery.easing.min.js"></script>-->
+<script src="js/bootstrap.min.js"></script>
+<!--弹出层-->
+<!--<script src="js/jquery.lightbox.min.js"></script>-->
+<script type="application/javascript" src="/js/uploadPic.js"></script>
+<a href="#" class="scrollup"></a>
+<br />
+<script type="application/javascript" src="/js/footer.js"></script>
+
+</body>
+
+</html>

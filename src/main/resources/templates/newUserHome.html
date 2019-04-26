@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head>
+<meta charset="utf-8" />
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
+<title th:title="${title}">Home</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="" />
+
+<meta name="author" content="" />
+<!-- favicons -->
+<link rel="shortcut icon" href="/images/favicon.ico" />
+<link rel="stylesheet" type="text/css" href="/images/style.css" />
+<script src="/images/move.js" type="text/javascript"></script>
+<script src="/images/index.js" type="text/javascript"></script>
+<!-- bootstrap core CSS -->
+<link href="/css/bootstrap.min.css" rel="stylesheet" />
+<!-- custom styles for this template -->
+<link href="/css/templatemo_style.css" rel="stylesheet" />
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+
+    <![endif]-->
+<script src="ueditor.parse.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/search-form.css">
+<script src="/js/jquery-1.10.1.min.js"></script>
+<link rel="stylesheet" href="/css/style.css">
+<link href="/css/jquery-accordion-menu.css" rel="stylesheet"
+	type="text/css" />
+<link href="/css/font-awesome.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="/css/pintuer.css">
+<!--     <script src="http://www.pintuer.com/js/jquery.js"></script> -->
+<script src="/js/pintuer.js"></script>
+<script src="/js/respond.js"></script>
+<script src="/js/layer.js"></script>
+<style type="text/css">
+* {
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+}
+
+.filterinput {
+	background-color: rgba(249, 244, 244, 0);
+	border-radius: 15px;
+	width: 90%;
+	height: 30px;
+	border: thin solid #FFF;
+	text-indent: 0.5em;
+	font-weight: bold;
+	color: #FFF;
+}
+
+#demo-list a {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	-o-text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 100%;
+}
+</style>
+<!--   <script src="js/jquery-1.11.2.min.js" type="text/javascript"></script> -->
+<script src="/js/jquery-accordion-menu.js" type="text/javascript"></script>
+<!--     <script type="text/javascript">
+        $(function() {
+            //顶部导航切换
+            $("#demo-list li").click(function() {
+                $("#demo-list li.active").removeClass("active")
+                $(this).addClass("active");
+            })
+        })
+        </script> -->
+</head>
+
+<body>
+	<header>
+		<div class="container" id="menuctrl"
+			style="padding-left: 0; margin-left: 0">
+			<div class="toggle-menu">
+				<span class="toggle-button">
+					<div class="menu-bar menu-bar-top"></div>
+					<div class="menu-bar menu-bar-middle"></div>
+					<div class="menu-bar menu-bar-bottom"></div>
+				</span>
+				<div class="mymenu">
+					<div id="jquery-accordion-menu" class="jquery-accordion-menu red">
+						<div class="jquery-accordion-menu-header" id="form"></div>
+						<ul id="demo-list">
+							<li th:if="${not islogin}"><a id="ajaxLogin"><i
+									class="fa fa-user"></i>login</a></li>
+
+							<li th:if="${islogin}"><a
+								th:href="@{'/'+${user.openid}+'/home'}"><i
+									class="fa fa-user"></i> <span th:text="${user.name}">用户名</span></a>
+							</li>
+							<li class="active"><a href="/"><i class="fa fa-home"></i>首页
+							</a></li>
+							<li><a href="#"><i class="fa fa-glass"></i>创作 </a>
+								<ul class="submenu">
+									<li><a href="/write">写文章</a></li>
+									<li><a id="uploadGallery">传相册</a></li>
+								</ul></li>
+							<li th:if="${islogin}"><a
+								th:href="@{'/'+${user.id}+'/favorite'}"><i
+									class="fa fa-file-image-o"></i>我的收藏 </a> <span
+								th:text="${collectionNum}" class="jquery-accordion-menu-label">12
+							</span></li>
+							<li th:if="${islogin}"><a
+								th:href="@{'/'+${user.id}+'/subscribe'}"><i
+									class="fa fa-file-image-o"></i>订阅动态 </a> <span
+								th:text="${collectionNum}" class="jquery-accordion-menu-label">6</span>
+							</li>
+							<li th:if="${islogin}"><a href="#"><i class="fa fa-cog"></i>Services
+							</a>
+								<ul class="submenu">
+									<li><a th:href="@{'/'+${user.openid}+'/home'}">个人中心</a></li>
+									<li><a href="#">我的内容</a>
+										<ul class="submenu">
+											<li><a th:href="@{'/article/user/'+${user.id}}">我的文章</a></li>
+											<li><a th:href="@{'/gallery/'+${user.id}+'/1'}">我的相册</a></li>
+										</ul></li>
+									<li><a id="showUserDetail">我的名片</a></li>
+								</ul></li>
+							<!--  <li><a href="#"><i class="fa fa-home"></i>系统管理 </a></li> -->
+							<li><a href="#"><i class="fa fa-suitcase"></i>文章 </a>
+								<ul class="submenu">
+									<li><a href="/article/list.php">所有文章</a></li>
+									<li><a href="/article/topic/emotion">心情</a></li>
+									<li><a href="/article/topic/program">编程</a></li>
+									<li><a href="/article/topic/share">分享</a></li>
+									<li><a href="/article/topic/AI">人工智能 </a></li>
+								</ul></li>
+							<li th:if="${islogin}"><a id="logout"><i
+									class="fa fa-user"></i>注销</a></li>
+							<li><a href="#"><i class="fa fa-envelope"></i>Contact </a></li>
+						</ul>
+						<div class="jquery-accordion-menu-footer">geeklemon.cn</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<form onsubmit="return submitFn(this, event);" action="/forsearch"
+			method="post">
+			<div class="search-wrapper">
+				<div class="input-holder">
+					<input type="text" name="search" class="search-input"
+						placeholder="Type to search" />
+					<button class="search-icon" onclick="searchToggle(this, event);">
+						<span></span>
+					</button>
+				</div>
+				<span class="close" onclick="searchToggle(this, event);"></span>
+				<div class="result-container"></div>
+			</div>
+		</form>
+		<div class="container"></div>
+	</header>
+
+	<script type="text/javascript">
+		function searchToggle(obj, evt) {
+			var container = $(obj).closest('.search-wrapper');
+
+			if (!container.hasClass('active')) {
+				container.addClass('active');
+				evt.preventDefault();
+			} else if (container.hasClass('active')
+					&& $(obj).closest('.input-holder').length == 0) {
+				container.removeClass('active');
+				// clear input
+				container.find('.search-input').val('');
+				// clear and hide result container when we press close
+				container.find('.result-container').fadeOut(100, function() {
+					$(this).empty();
+				});
+			}
+		}
+
+		function submitFn(obj, evt) {
+			value = $(obj).find('.search-input').val().trim();
+
+			_html = "Yup yup! Your search text sounds like this: ";
+			if (!value.length) {
+				_html = "Add some text friend :D";
+				$(obj).find('.result-container').html(
+						'<span>' + _html + '</span>');
+				$(obj).find('.result-container').fadeIn(100);
+				evt.preventDefault();
+				return false;
+
+			} else {
+				return true;
+			}
+		}
+	</script>
+
+
+
+	<div class="container">
+		<div id="pxs_container" class="pxs_container">
+			<div class="pxs_bg">
+				<div class="pxs_bg1"></div>
+				<div class="pxs_bg2"></div>
+				<div class="pxs_bg3"></div>
+			</div>
+			<div class="pxs_loading"></div>
+			<div class="pxs_slider_wrapper">
+				<ul class="pxs_slider">
+					<li><img src="/images/1.jpg" alt="First Image" /></li>
+					<li><img src="/images/2.jpg" alt="Second Image" /></li>
+					<li><img src="/images/3.jpg" alt="Third Image" /></li>
+					<li><img src="/images/4.jpg" alt="Forth Image" /></li>
+					<li><img src="/images/5.jpg" alt="Fifth Image" /></li>
+					<li><img src="/images/6.jpg" alt="Sixth Image" /></li>
+				</ul>
+				<div class="pxs_navigation">
+					<span class="pxs_next"></span> <span class="pxs_prev"></span>
+				</div>
+				<ul class="pxs_thumbnails">
+					<li><img src="/images/thumbs/1.jpg" alt="First Image" /></li>
+					<li><img src="/images/thumbs/2.jpg" alt="Second Image" /></li>
+
+					<li><img src="/images/thumbs/3.jpg" alt="Third Image" /></li>
+					<li><img src="/images/thumbs/4.jpg" alt="Forth Image" /></li>
+					<li><img src="/images/thumbs/5.jpg" alt="Fifth Image" /></li>
+					<li><img src="/images/thumbs/6.jpg" alt="Sixth Image" /></li>
+
+				</ul>
+			</div>
+		</div>
+
+		<div class="footer"></div>
+	</div>
+
+	<script>
+		var oLoad = getByClass(document.body, 'pxs_loading')[0];
+		var oImgBox = getByClass(document.body, 'pxs_slider_wrapper')[0];
+		//var oEvent=ev||event;
+		//var obj=oEvent.srcElement||oEvent.target;
+		var imgs = document.getElementsByTagName('img');
+		for (var i = 0; i < imgs.length; i++) {
+			imgs[i].onload = function() {
+				oLoad.style.display = 'none';
+			}
+			oImgBox.style.display = 'block';
+		}
+	</script>
+	<span id="pagetype" th:attr="user=${username}, mytype=${topic}"></span>
+	<div
+		class="txt-border radius-circle border-green swing-hover text-center">
+		<div class="txt radius-circle bg-green" id="subtitle">
+			<span th:if="${topic}" th:text="${topic}">主题</span> <span
+				th:if="${username}" th:text="${username}">主题</span> <span
+				th:if="${username} and ${topic}" th:text="lemon">主题</span>
+		</div>
+	</div>
+	<script type="text/javascript" src="/js/string-format.js"></script>
+
+	<div class="line-big">
+		<!-- left list start -->
+		<div class="xl12 xm8">
+			<ul class="list-group list-striped" id="list">
+
+			</ul>
+
+			<div style="text-align: center">
+				<a href="#" data="1" id="first" class="btn-link">首页</a> <a href="#"
+					data="" id="previous" class="btn  btn-link"> <span
+					class="icon-chevron-left"></span>Previous
+				</a> <a id="currentPage" class="btn"> <span
+					class="badge bg-blue-light swing-hover"></span>
+				</a> <a href="#" data="" id="next" class="btn btn-link"> Next<span
+					class="icon-chevron-right"></span>
+				</a> <a data="" id="last" class="btn-link">尾页</a> <span id="totlenum"></span>
+			</div>
+		</div>
+		<!-- left list end -->
+		<script type="text/javascript" src="/js/addList.js"></script>
+
+		<!--  right start -->
+		<div class="xl12 xm4">
+			<ul class="list-unstyle height-big padding-top"
+				th:each="hotart : ${hot}">
+				<li><span class="badge bg-yellow">热门</span> <a
+					th:href="@{'/article/detail/'+${hotart.id}}"
+					th:text="${hotart.title}">爱是最不可算计的</a></li>
+			</ul>
+			<div class="hidden-l">
+				<!-- 媒体 -->
+				<hr class="bg-mix" />
+				<br /> <br />
+				<ul class="list-unstyle">
+					<li>
+						<div class="media media-y">
+							<a href="#"> <img
+								th:src="@{'images/userlogo/'+${reqUser.userlogo}}"
+								class="img-responsive radius-circle xl12 xm6" alt="...">
+							</a>
+							<div class="media-body xl12 xm6">
+								<strong th:text="${reqUser.nickName}">
+									如果樱花飘落的速度是每秒5厘米的话，那两颗心要多久才能靠近？ </strong> <span
+									th:text="${reqUser.autograph}">
+									时间带着鲜明的恶意，从我身上慢慢流走；我深知，这以后的将来，我们无法一起走过。
+									对于命途多舛的人生，以及渺茫的时间，阻隔在我们之间的这一事实，我们无可奈何。
+									如果樱花飘落的速度是每秒5厘米的话，那两颗心要多久才能靠近？——新海诚《秒速五厘米》 </span>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div>
+				<hr class="bg-mix" />
+				<br />&nbsp; &nbsp; <span class="badge bg-sub swing-hover"><a
+					href="/article/topic/emotion">心情</a></span>&nbsp; &nbsp;&nbsp; &nbsp; <span
+					class="badge bg-blue-light swing-hover"><a
+					href="/article/topic/AI">人工智能</a></span> &nbsp; &nbsp;&nbsp; &nbsp; <span
+					class="badge bg-sub swing-hover "><a
+					href="/article/topic/emotion">生活</a></span>&nbsp; &nbsp;&nbsp; &nbsp; <br />
+				<br />
+				<span class="badge bg-blue-light swing-hover"><a
+					href="/article/topic/share">分享</a></span> <br /> <br />
+				&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
+				<span class="badge bg-mix swing-hover"><a
+					href="/article/topic/机器学习">机器学习</a></span>&nbsp; &nbsp;&nbsp; &nbsp; <span
+					class="badge bg-green-light swing-hover"><a
+					href="/article/topic/神经网络">神经网络</a></span>
+
+			</div>
+		</div>
+		<!-- right end -->
+	</div>
+	<div style="display: none" id="loginuser" th:if="${islogin}"
+		th:attr="loginuser=${user.id}"></div>
+	<a href="#" class="scrollup"></a>
+	<br />
+	<script type="application/javascript" src="/js/footer.js"></script>
+	<script type="application/javascript" src="/js/freshList.js"></script>
+
+</body>

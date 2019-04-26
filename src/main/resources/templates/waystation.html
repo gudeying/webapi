@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+<meta charset="UTF-8"></meta>
+<meta http-equiv="refresh" th:content="'2;url='+${url}" />
+<link rel="shortcut icon" href="images/favicon.ico" />
+<title>跳转中</title>
+</head>
+<body>
+
+
+	<h1 th:text="${text}">中间站</h1>
+	<h1>
+		<a href="http://localhost:8888/hello" th:href="@{${url}}">继续</a>
+	</h1>
+</body>
+</html>

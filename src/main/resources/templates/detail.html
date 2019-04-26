@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+<meta charset="utf-8" />
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
+<title th:text="${article.title}">Article Detail</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="" />
+<!-- 
+Tamarillo Template
+http://www.templatemo.com/tm-399-tamarillo
+-->
+<meta name="author" content="" />
+<!-- favicons -->
+<link rel="shortcut icon" href="images/favicon.ico" />
+<!-- bootstrap core CSS -->
+<link href="css/bootstrap.min.css" rel="stylesheet" />
+
+<!-- custom styles for this template -->
+<link href="css/templatemo_style.css" rel="stylesheet" />
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+
+<![endif]-->
+<script src="ueditor.parse.js"></script>
+<script type="text/javascript" src="jquery.js"></script>
+<link rel="stylesheet" type="text/css" href="css/search-form.css">
+<script src="js/jquery-1.10.1.min.js"></script>
+<script src="js/script.js"></script>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+	<header>
+		<span class="toggle-button">
+			<div class="menu-bar menu-bar-top"></div>
+			<div class="menu-bar menu-bar-middle"></div>
+			<div class="menu-bar menu-bar-bottom"></div>
+		</span>
+		<div class="menu-wrap">
+			<div class="menu-sidebar">
+				<ul class="menu">
+					<li th:if="${not islogin}"><a th:href="@{/login}">login</a></li>
+					<li th:if="${islogin}"><img
+							th:src="@{'images/userlogo/'+${user.userlogo}}"
+							th:text="${user.name}" />
+					</li>
+					<li><a href="/">首页</a></li>
+					<li class="menu-item-has-children"><a
+						href="/article">文章</a> <span class="sidebar-menu-arrow"></span>
+						<ul class="sub-menu" >
+							<li><a href="/topic?subject=emotion">情感</a></li>
+							<li><a href="/topic?subject=program">编程</a></li>
+							<li><a href="/topic?subject=share">分享</a></li>
+						</ul>
+					</li>
+					<li><a href="/information">资讯</a></li>
+					<li class="menu-item-has-children" th:if="${islogin}"><a
+						th:href="@{/usercenter(user=${user.name})}">个人中心</a> <span class="sidebar-menu-arrow"></span>
+						<ul class="sub-menu" th:if="${user.level} gt 0">
+							<li><a href="/manage?write=writearticle">写文章</a></li>
+							<li><a href="/manage?write=writeblog">写博客</a></li>
+							<li th:if="${user.level} gt 1"><a href="/manage?write=upgallery">传相册</a></li>
+							
+						</ul>
+					</li>
+					<li></li>
+					<li th:if="${islogin}"><a href="/quit">注销</a></li>
+				</ul>
+			</div>
+		</div>
+		<form onsubmit="return submitFn(this, event);" action="/forsearch"
+			method="post">
+			<div class="search-wrapper">
+				<div class="input-holder">
+					<input type="text" name="search" class="search-input"
+						placeholder="Type to search" />
+					<button class="search-icon" onclick="searchToggle(this, event);">
+						<span></span>
+					</button>
+				</div>
+				<span class="close" onclick="searchToggle(this, event);"></span>
+				<div class="result-container"></div>
+			</div>
+		</form>
+		<div class="container"></div>
+	</header>
+	<!-- end of templatemo_header -->
+
+
+	<script type="text/javascript">
+	function searchToggle(obj, evt){
+		var container = $(obj).closest('.search-wrapper');
+
+		if(!container.hasClass('active')){
+			  container.addClass('active');
+			  evt.preventDefault();
+		}
+		else if(container.hasClass('active') && $(obj).closest('.input-holder').length == 0){
+			  container.removeClass('active');
+			  // clear input
+			  container.find('.search-input').val('');
+			  // clear and hide result container when we press close
+			  container.find('.result-container').fadeOut(100, function(){$(this).empty();});
+		}
+	}
+
+	function submitFn(obj, evt){
+		value = $(obj).find('.search-input').val().trim();
+
+		_html = "Yup yup! Your search text sounds like this: ";
+		if(!value.length){
+			_html = "Add some text friend :D";
+			$(obj).find('.result-container').html('<span>' + _html + '</span>');
+		    $(obj).find('.result-container').fadeIn(100);
+			evt.preventDefault();
+			return false;
+	      
+		}
+		else{
+			return true;
+		}
+	}
+</script>
+	<section id="templatemo_slideshow">
+	</section>
+
+		<div class="container">
+			<div class="row">
+				<h1 th:text="${article.title}">Detail</h1>
+			</div>
+		</div>
+			<div class="container">
+					<span th:text="'&nbsp;&nbsp;'+${article.time}">
+					</span><a th:text="'&nbsp;'+${article.author}" th:href="@{/usercenter(user=${article.author})}"></a>
+						   <a th:text="'&nbsp;'+${article.subject}" th:href="@{/usertopic(subject=${article.subject},author=${article.author})}"></a>
+					<h3></h3>
+					<br/>
+					<h2 th:if="(${islogin} and ${user.level} eq 3) or (${islogin} and ${user.name} eq ${article.author} )"><a th:href="@{/deletearticle(id=${article.id})}" onclick="return del()">删除</a></h2>
+					<div id="content" th:utext="${article.content}"></div>
+				
+					<script>
+				    $(function () {
+				    	uParse("#content",{rootPath:"./"});
+				    })
+				</script>
+	
+				<script>
+				function del(){
+					if(confirm("真的要删除该条记录吗?")){
+					return true;
+					}else{
+					return false;
+					}
+					}
+				</script>
+				
+			</div>
+		<div class="container">
+			<div class="solidline"></div>
+			<div th:if="${previous}">&nbsp;&nbsp;上一篇<a th:text="${previous.title}" th:href="@{/detail(id=${previous.id})}"></a></div>
+			<div th:if="${next}">&nbsp;&nbsp;下一篇<a th:text="${next.title}" th:href="@{/detail(id=${next.id})}"></a></div>
+		</div>
+	
+	<div class="container">
+		<div class="solidline">
+			<div>
+				<h2>评论 ：</h2>
+				<ul th:each="comment : ${comments}">
+					<li><span th:utext="|${comment.user}:${comment.time}--${comment.content}|">time
+							第一条评论</span>
+						<hr></hr></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<!-- solid line -->
+
+	<section id="templatemo_contact">
+		<div class="container">
+			<div class="row" id="templatemo_contact_gray_wap">
+				<div class="col-md-24 col-sm-24">
+					<h1 class="margin_top">Comment</h1>
+				</div>
+				<div th:if="${not islogin}">
+					<h1>
+						还没登陆？点击<a th:href="@{/login(back='detail?id='+${article.id})}">登录</a>再评论
+					</h1>
+				</div>
+				<div class="col-md-1"></div>
+				<div class="col-md-9  col-sm-18 col-sm-push-3" th:if="${islogin}">
+					<form id="contact-form" th:action="@{/comment}" method="post">
+						<label> <span>Your Message</span> <textarea name="comment"
+								id="message"></textarea> <input type="hidden" name="id"
+							th:value="${article.id}"></input>
+						</label> <label>
+							<button onclick="return checkForm()" name="submit" type="submit">leave
+								message</button>
+						</label>
+					</form>
+					<a href="#" th:href="@{/longcomment(id=${article.id})}"
+						class="btn btn-default margin_top">长留言</a>
+					<script type="text/javascript">
+						function checkForm() {
+							var input_cart = document.getElementById("message");
+							if (input_cart.value.trim().length == 0
+									|| input_cart.value == null) {
+								alert("内容不能为空!");
+								input_cart.focus();
+								return (false);
+							} else {
+								return true;
+							}
+						}
+					</script>
+				</div>
+			</div>
+			<!-- end of row -->
+			<div class="row" id="templatemo_footer">
+				<div class="col-md-24">
+					<p>Copyright 2017 gudeying</p>
+				</div>
+			</div>
+			<!-- end of templatemo_footer -->
+		</div>
+		<a href="#" class="scrollup"><i class="fa fa-angle-up active"></i></a>
+	</section>
+	<!-- end of templatemo_contact -->
+	<script src="js/jquery.min.js"></script>
+	<script src="js/jquery.scrollto.min.js"></script>
+	<script src="js/jquery.easing.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+
+	<!-- templatemo 399 tamarillo -->
+</body>
+</html>
